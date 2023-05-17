@@ -9,7 +9,7 @@ const char* password = "ubicomp407"; // Wi-Fi Password
 const char* server = "203.253.128.177"; // 모비우스 서버 IP 주소
 const int port = 7579; // 모비우스 서버 포트
 const String cnt = "Led";
-const String ae = "justin"; // 모비우스에서 사용할 AE 이름
+const String ae = "sionjeon"; // 모비우스에서 사용할 AE 이름
 
 
 void setup() {
@@ -35,7 +35,8 @@ void loop() {
     
     
     // HTTP GET 요청 설정
-    http.begin("http://" + String(server) + ":" + String(port) + "/Mobius/" + ae + "/" + cnt + "/" + "la"); //Specify the URL
+    http.begin("http://" + String(server) + ":" + String(port) + "/Mobius/" + ae + "/" + cnt + "/la"); //Specify the URL
+
     http.addHeader("Accept", "application/json");
     http.addHeader("X-M2M-RI", "12345");
     http.addHeader("X-M2M-Origin", ae);
@@ -45,12 +46,12 @@ void loop() {
   
         String response = http.getString();
         //Serial.println(httpCode);
-        //Serial.println(payload);
+        //Serial.println(response);
         DynamicJsonDocument doc(1024);
         deserializeJson(doc, response);
 
       String con = doc["m2m:cin"]["con"].as<String>();
-      Serial.println(con);      // 나중에 이 값만 사용
+      Serial.println(con);      // con 값 출력
 
       }
   
