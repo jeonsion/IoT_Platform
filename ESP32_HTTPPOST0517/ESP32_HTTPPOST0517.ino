@@ -6,7 +6,7 @@ const char* password = "ubicomp407"; // Wi-Fi Password
 const char* server = "203.253.128.177"; // 모비우스 서버 IP 주소
 const int port = 7579; // 모비우스 서버 포트
 const String cnt = "Led";
-const String ae = "justin"; // 모비우스에서 사용할 AE 이름
+const String ae = "sionjeon"; // 모비우스에서 사용할 AE 이름
 const String cin = "POSTING from ESP32"; // 전송할 데이터
 
 void setup() {
@@ -50,5 +50,5 @@ void loop() {
     Serial.println("Error in WiFi connection");
   }
 
-  delay(10000); // Send a request every 10 seconds
+  delay(3000); // Send a request every 10 seconds
 }
