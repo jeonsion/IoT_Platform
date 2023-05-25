@@ -109,7 +109,7 @@ void setup() {
 void loop() {
   if (ledValueReady && fanValueReady) {
     // LED와 Fan 값 출력
-    Serial.println("LED Value: " + ledValue + ", Fan Value: " + String(fanValue));
+    Serial.println("LED Value: " + ledValue + ", Fan Value: " + fanValue);
 
     // LED 제어
     if (ledValue == "1") {
