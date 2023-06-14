@@ -1,0 +1,116 @@
+import requests
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+# IoT 장치
+IoT_Device = LED
+
+# URL 설정
+url = http114.71.220.1107579MobiusSmartHome + IoT_Device + fu=2&rcn=5&lim=10
+headers = {
+    Accept applicationjson,
+    X-M2M-RI 12345,
+    X-M2M-Origin SOrigin
+}
+
+# 데이터 가져오기
+response = requests.get(url, headers=headers)
+data = response.json()
+
+# 데이터 파싱
+timestamps = []
+values = []
+
+if m2mrsp in data
+    cin_list = data[m2mrsp][m2mcin]
+
+    for cin in cin_list
+        if con in cin and ct in cin
+            # 시간 정보 추출
+            timestamp = datetime.strptime(cin[ct], %Y%m%dT%H%M%S)
+            timestamps.append(timestamp)
+
+            # 값 정보 추출 (가정 con은 단일 값이라고 가정)
+            try
+                value = float(cin[con])
+                values.append(value)
+            except
+                values.append(cin[con])
+
+# 계산
+duration = 0
+start_time = None
+on_timestamps = []  # LED가 켜진 타임스탬프
+off_timestamps = []  # LED가 꺼진 타임스탬프
+electricity_costs = []  # 전기세
+
+# 전기요금률 (단위 원초)
+electricity_rate = 15
+
+for i in range(len(values))
+    if values[i] == 1
+        if start_time is None
+            start_time = timestamps[i]
+        on_timestamps.append(timestamps[i])
+    else
+        if start_time is not None
+            end_time = timestamps[i-1]
+            duration += (end_time - start_time).total_seconds()
+            start_time = None
+            electricity_costs.append(duration  electricity_rate)  # 전기세 계산 (전기요금률과 기간을 곱하여 저장)
+            duration = 0
+        off_timestamps.append(timestamps[i])
+
+# 전기요금의 총 합 계산
+total_electricity_cost = -sum(electricity_costs)
+
+# 출력
+print(Total Electricity Cost, total_electricity_cost, $)
+
+# 시각화
+plt.plot(timestamps, values)
+plt.xlabel(Timestamp)
+plt.ylabel(Value)
+plt.title(IoT_Device +  Data Visualization)
+plt.xticks(rotation=90)
+
+# LED ON 타임스탬프 표시
+for timestamp in on_timestamps
+    plt.axvline(x=timestamp, color=green, linestyle=--, alpha=0.5)
+
+# LED OFF 타임스탬프 표시
+for timestamp in off_timestamps
+    plt.axvline(x=timestamp, color=red, linestyle=--, alpha=0.5)
+
+# LED ON 기간 시각화
+for i in range(len(on_timestamps))
+    plt.annotate(
+        ON,
+        xy=(on_timestamps[i], 1),
+        xytext=(on_timestamps[i], 1.1),
+        arrowprops=dict(facecolor=black, arrowstyle=-),
+        horizontalalignment=center,
+    )
+
+# LED OFF 기간 시각화
+for i in range(len(off_timestamps))
+    plt.annotate(
+        OFF,
+        xy=(off_timestamps[i], 0),
+        xytext=(off_timestamps[i], -0.1),
+        arrowprops=dict(facecolor=black, arrowstyle=-),
+        horizontalalignment=center,
+    )
+
+# 전기세 시각화
+for i in range(len(electricity_costs))
+    x = on_timestamps[i]
+    y = 1
+    plt.text(x, y, f{electricity_costs[i].2f}$, ha=center)
+
+# 전기요금 총 합 시각화
+plt.text(
+    timestamps[0], -0.5, fTotal Electricity Cost {total_electricity_cost.2f}$, ha=left
+)
+
+plt.show()

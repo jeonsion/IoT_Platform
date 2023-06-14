@@ -1,0 +1,128 @@
+from tkinter import *
+import datetime
+import pytz
+import requests
+import time
+import matplotlib.pyplot as plt
+import statistics
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+# Global variables
+Dust_values = []
+time_values = []
+over_eighty_times = []
+monitoring_flag = False
+fig = None
+canvas = None
+
+def start_monitoring():
+    global monitoring_flag, fig, canvas
+    monitoring_flag = True
+
+    def get_dust_data():
+        global fig, canvas
+        url = "http://203.253.128.177:7579/Mobius/sionjeon/Dust/la"
+        payload = {}
+        headers = {
+            'Accept': 'application/json',
+            'X-M2M-RI': '12345',
+            'X-M2M-Origin': 'SOrigin'
+        }
+        response = requests.request("GET", url, headers=headers, data=payload)
+        data = response.json()
+        con = int(data["m2m:cin"]["con"])  # Convert con value to int before adding to Dust_values
+        Dust_values.append(con)
+
+        # 한국 시간 추가
+        seoul_tz = pytz.timezone('Asia/Seoul')
+        current_time = datetime.datetime.now(seoul_tz).replace(microsecond=0)
+        time_values.append(current_time)  # 현재 시간을 time_values 리스트에 추가
+
+        # If con value is over 80, append the time to over_eighty_times
+        if con >= 80:
+            over_eighty_times.append(current_time)
+
+        print("Dust latest value:", con)
+        print("측정 시간", current_time)
+
+        # 시간순으로 정렬된 인덱스를 가져옵니다.
+        sorted_indexes = sorted(range(len(time_values)), key=lambda i: time_values[i])
+
+        # 정렬된 인덱스를 사용하여 데이터를 정렬합니다.
+        sorted_time_values = [time_values[i] for i in sorted_indexes]
+        sorted_dust_values = [Dust_values[i] for i in sorted_indexes]
+
+        # Determine color based on dust values
+        colors = ['red' if value >= 80 else 'black' for value in sorted_dust_values]
+
+        if fig is None:
+            fig, ax = plt.subplots()
+        else:
+            ax = fig.axes[0]
+            ax.cla()  # Clear the previous plot
+
+        ax.scatter(sorted_time_values, sorted_dust_values, color=colors)
+        ax.plot(sorted_time_values, sorted_dust_values, color='blue')  # Add line graph
+        ax.axhline(y=80, color='r')  # Add horizontal line at y=80
+
+        # 데이터 포인트 옆에 값을 표시합니다.
+        for i in range(len(sorted_dust_values)):
+            ax.text(sorted_time_values[i], sorted_dust_values[i], str(sorted_dust_values[i]))
+
+        ax.set_xlabel('Time', fontsize=15, weight='bold')
+        ax.set_ylabel('Dust Values', fontsize=15, weight='bold')
+        ax.set_title('Dust values over Time')
+        ax.tick_params(axis='x', rotation=45)
+        ax.set_ylim([0, 100])  # Set y-axis limits from 0 to 100
+        fig.tight_layout()
+
+        if canvas is None:
+            # 그래프를 표시하기 위한 FigureCanvasTkAgg 생성
+            canvas = FigureCanvasTkAgg(fig, master=win)
+            canvas.draw()
+
+            # 그래프를 표시할 Canvas 위젯 생성
+            graph_canvas = canvas.get_tk_widget()
+            graph_canvas.grid(row=1, column=0, columnspan=2)
+        else:
+            # 그래프를 다시 그립니다.
+            canvas.draw()
+
+        # Add average dust value and over eighty times as additional information at the bottom of the graph
+        plt.figtext(0.05, 0.065, "Warning level: 80", ha="left", fontsize=12, va="bottom", color='red')
+        average_dust_value = round(statistics.mean(sorted_dust_values), 2)
+        plt.figtext(0.05, 0.035, "Average Dust value: {:.2f}".format(average_dust_value), ha="left", fontsize=12, va="bottom")
+        plt.figtext(0.05, 0.005, "Times when Dust value exceeded 80: " + ', '.join([str(time) for time in over_eighty_times]), ha="left", fontsize=8, va="bottom")
+
+        # 창을 업데이트합니다.
+        win.update()
+
+    while monitoring_flag:
+        get_dust_data()
+        print("--------------------")
+        time.sleep(2)
+
+def stop_monitoring():
+    global monitoring_flag, fig, canvas
+    monitoring_flag = False
+    fig = None
+    canvas.get_tk_widget().grid_forget()  # Remove the graph from the GUI
+    canvas = None
+    Dust_values.clear()
+    time_values.clear()
+    over_eighty_times.clear()
+
+win = Tk()  # 창 생성
+win.geometry("700x500")  # Set the window size in pixels
+win.title("Dust Monitoring")
+win.option_add("*Font", "나눔고딕 15")
+
+# Start Button
+start_button = Button(win, text="Start Monitoring", command=start_monitoring)
+start_button.grid(row=0, column=0, padx=10, pady=10)
+
+# Stop Button
+stop_button = Button(win, text="Stop Monitoring", command=stop_monitoring)
+stop_button.grid(row=0, column=1, padx=10, pady=10)
+
+win.mainloop()  # 창 실행
