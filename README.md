@@ -3,6 +3,18 @@
 
 ---
 ## Developemnt Enviroment
+### Boards
 Raspberry Pi 3 Model B
 
 ESP32 Dev Module
+### Sensors
+CDS Cell
+
+PMS7003
+
+LED
+
+DC motor
+
+Servo motor
+
