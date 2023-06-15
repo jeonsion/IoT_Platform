@@ -19,6 +19,22 @@ DC motor
 Servo motor
 
 ---
+## Service Scenario
+![image](https://github.com/jeonsion/IoT_Platform/assets/57317636/21100ff2-52e1-4fa8-b0c5-c9d42afa83e0)
+
+## Application 
+<p align="center">
+  <img width="393" alt="image" src="https://github.com/jeonsion/IoT_Platform/assets/57317636/bd4ddb0f-730c-43d8-abf4-aa954b1333c0">
+  
+  - 구글 STT API 활용
+  - 원격으로 ON/OFF 제어 가능
+  - 실시간 센서 모니터링 가능
+</p>
+
+
+
+
+
 ## Data Visualization
 
 ### LED Log & Air Cleaner
