@@ -28,6 +28,10 @@ Servo motor
 ### PM 10 Data
 <img width="317" alt="image" src="https://github.com/jeonsion/IoT_Platform/assets/57317636/02fc46a4-3422-4138-9a5d-90375254a221">
 
+### Air Korea
+
+<img width="1440" alt="스크린샷 2023-06-15 오전 11 33 44" src="https://github.com/jeonsion/IoT_Platform/assets/57317636/e07f58e5-6a75-427a-b2e9-7f12c398cad4">
+
 
 
 ---
