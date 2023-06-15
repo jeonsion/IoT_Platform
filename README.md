@@ -25,7 +25,7 @@ Servo motor
 <img width="393" alt="image" src="https://github.com/jeonsion/IoT_Platform/assets/57317636/64e8c55f-0f33-45f4-a34b-adebb673de17">
 <img width="397" alt="image" src="https://github.com/jeonsion/IoT_Platform/assets/57317636/021cf472-3391-4522-ab57-b532cc5567ca">
 
-### PM2.5 Data
+### PM 10 Data
 <img width="317" alt="image" src="https://github.com/jeonsion/IoT_Platform/assets/57317636/02fc46a4-3422-4138-9a5d-90375254a221">
 
 
