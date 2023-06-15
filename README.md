@@ -51,7 +51,8 @@ Servo motor
 
 
 ---
-### Mobius monitoring Link
+### Realtime Monitoring
+[oneM2M based Mobius Open Platform]
 http://203.253.128.177:7575/#!/monitor
 
 ### Demo Vedio
